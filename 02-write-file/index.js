@@ -13,8 +13,8 @@ stdin.on ('data', data => {
   text.write(data);
   
 });
-  
+
 process.on('SIGINT', () => {
   stdout.write('Hmm. Bye! Come back!\n');
-  process.exit();
+  process.exit(0);
 });
