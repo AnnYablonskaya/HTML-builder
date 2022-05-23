@@ -49,9 +49,6 @@ async function changeHTML(file) {
     await fsp.readFile(path.join(__dirname, 'components', file.name))
       .then(function(result) {
         return data = result.toString();
-      })
-      .catch(function(error) {
-        console.log(error);
       });
   } catch (err) {
     console.error(err);
