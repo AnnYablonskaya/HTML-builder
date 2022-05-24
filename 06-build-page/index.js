@@ -26,20 +26,26 @@ const steam = fs.createWriteStream(path.join(__dirname, 'project-dist', 'style.c
 })(from, steam);
 
 //assets
-const filesIn = path.join(__dirname, 'assets');
-const filesOut = path.join(__dirname, 'project-dist','assets');
-(async () => {
-  await fsp.rm(filesOut, {force: true, recursive: true});
-  await fsp.mkdir(filesOut, {recursive: true});
-  const files = await fsp.readdir(filesIn, {withFileTypes: true});
-  files.forEach (async (file) => {
-    if (file.isFile()){
-      let from = path.join(filesIn, file.name);
-      let newFile = path.join(filesOut, file.name);
-      await fsp.copyFile(from, newFile);
+const fileIn = path.join(__dirname, 'assets');
+const fileOut = path.join(__dirname, 'project-dist','assets');
+
+const copyDir = async function(filesIn, filesOut) {
+  try {
+    await fsp.rm(filesOut, {recursive: true, force: true});
+    await fsp.mkdir(filesOut, {recursive: true});
+    const files = await fsp.readdir(filesIn, {withFileTypes: true});
+    for (let file of files) {
+      if (file.isFile()) {
+        fsp.copyFile(`${filesIn}/${file.name}`, `${filesOut}/${file.name}`);
+      } else {
+        copyDir(`${filesIn}/${file.name}`, `${filesOut}/${file.name}`);
+      }
     }
-  });
-})();
+  } catch (err) {
+    console.log(err);
+  }
+};
+copyDir(fileIn, fileOut);
 
 //html
 let data = '';
