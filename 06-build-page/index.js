@@ -66,7 +66,7 @@ async function newHTML() {
   let templateFile = await fsp.readFile(path.join(__dirname, 'template.html'), 'utf-8');
   for (const file of files) {
     await changeHTML(file);
-    let nameHTML = `{${file.name.split('.').slice(0, 1).join('')}}`;
+    let nameHTML = `{{${file.name.split('.').slice(0, 1).join('')}}}`;
     let regexp  = new RegExp(nameHTML);
     templateFile = templateFile.replace(regexp, data);  
     const result = fs.createWriteStream(path.join(__dirname, 'project-dist', 'index.html'));  
